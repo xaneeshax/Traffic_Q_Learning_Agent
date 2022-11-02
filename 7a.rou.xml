@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2022-10-27 10:51:25 by Eclipse SUMO netedit Version 1.14.1
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <flow id="ParkerRight" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="8644213#8" to="102519704#0" end="3600.00" number="90"/>
+    <flow id="ParkerThru" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="8644213#8" to="426843743" end="3600.00" number="417"/>
+    <flow id="ParkerLeft" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="8644213#8" to="798289594#3" end="3600.00" number="3"/>
+    <flow id="HuntFromWRight" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426493699#0" to="-8644213#9" end="3600.00" number="5"/>
+    <flow id="HuntFromWThru" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426493699#0" to="102519704#0" end="3600.00" number="472"/>
+    <flow id="HuntFromWLeft" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426493699#0" to="426843743" end="3600.00" number="7"/>
+    <flow id="ForsythRight" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426843745#0" to="798289594#3" end="3600.00" number="139"/>
+    <flow id="ForsythThru" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426843745#0" to="-8644213#9" end="3600.00" number="215"/>
+    <flow id="ForsythLeft" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="426843745#0" to="102519704#0" end="3600.00" number="19"/>
+    <flow id="HuntFromERight" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="798289594#0" to="426843743" end="3600.00" number="12"/>
+    <flow id="HuntFromEThru" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="798289594#0" to="798289594#3" end="3600.00" number="438"/>
+    <flow id="HuntFromELeft" begin="0.00" departLane="random" departSpeed="avg" arrivalLane="current" from="798289594#0" to="-8644213#9" end="3600.00" number="125"/>
+
+</routes>
