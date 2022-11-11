@@ -47,6 +47,11 @@ Choose a Portion of the Map and configure traffic flow settings using the select
 Step 3:
 Generate the data. This will run a process to create folders containing the `osm.sumoconfig` file and other related XML files
 
+## Running the Simulation
+
+```
+sumo-gui -c osm.sumocfg 
+```
 
 ## File Descriptions
 
