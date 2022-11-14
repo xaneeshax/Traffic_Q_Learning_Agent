@@ -75,5 +75,5 @@ if __name__ == "__main__":
     # Connect to Script and intiate step counter
     traci.start(
         ["sumo", "-c", "/Users/aneesha/sumo/tools/2022-11-10-00-32-34/osm.sumocfg"])
-    # run_simulation()
+    run_simulation()
     set_tfl()
