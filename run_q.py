@@ -13,16 +13,6 @@ class Sim():
         self.states = [phase.state for phase in self.full_def.phases]
         # Record of light states (one for each step in simulation)
         self.actions_taken = []
-        # Store wait time of each car in the simulation
-        self.wait_times = {}
-        # Get wait time accumulated at each step
-        #self.step_time = {-1: 0}
-
-        # Store wait time by lane
-        #self.wait_times_by_lane = {}
-        # Get wait time accumulated at each step
-        #self.step_time_by_lane = {-1: 0}
-        
         # Wait time prev step
         self.prev_wait = None
         # Wait time by lane current step
@@ -39,14 +29,6 @@ class Sim():
         self.alpha = 0.01
         self.gamma = 0.9
         self.epsilon = 0.5
-        #phases_0 = (traci.trafficlight.Phase(duration=20.0,
-        #state='GGGgrGrrrrrrGrrrr', minDur=20.0, maxDur=20.0, next=()))
-        #print(phases_0)
-        #logic = traci.trafficlight.Logic(programID='0', type=0,
-        #currentPhaseIndex=0, phases = phases_0, subParameter={})
-        #traci.trafficlight.setRedYellowGreenState(self.junction,
-        #'GGGgrGrrrrrrGrrrr')
-        #print(traci.trafficlight.getRedYellowGreenState(self.junction))
 
     def run_simulation(self):
         step = 0
@@ -62,8 +44,6 @@ class Sim():
             self.actions_taken.append(action)
             # Get current longest lane
             lane = self.findLongestQueueLane()
-            # Current wait times
-            #self.getWaitTime(step)
             # Set traffic light and step
             traci.trafficlight.setRedYellowGreenState(self.junction, action)
             traci.simulationStep()
@@ -76,92 +56,26 @@ class Sim():
             # Update q values
             self.update_qs(lane, action, afterStepLongestLane, reward)
 
-            #print(self.getWaitTime(step))
-            
-            '''
-            for light in traffic_lights:
-                tl_state = traci.trafficlight.getRedYellowGreenState(light)
-                tl_phase_duration = traci.trafficlight.getPhaseDuration(light)
-                # Get info about the traffic light settings
-                # tl_lanes_controlled =
-                # traci.trafficlight.getControlledLanes(light)
-                # tl_program =
-                # traci.trafficlight.getCompleteRedYellowGreenDefinition(light)
-                tl_next_switch = traci.trafficlight.getNextSwitch(light)
-                # print(step, "tl", tl_state, tl_phase_duration,
-                # tl_lanes_controlled,
-                #       tl_program, tl_next_switch)
-                '''
             # End simulation if there are no more cars in play
             if len(traci.vehicle.getIDList()) == 0:
                 break
 
             step += 1
 
-        #total_waiting_time = sum(self.wait_times.values())
-        #print(self.actions_taken)
-        #print(self.qs)
-        #traci.close()
-
     def updateWaitTime(self, step):
         step_wait_time = 0
-        # Cars in the current frame
-        #cars_in_sim = traci.vehicle.getIDList()
-
-        #self.step_time[step] = sum([traci.vehicle.getAccumulatedWaitingTime(car) for car in cars_in_sim]) - self.step_time[step - 1]
-        #print(self.step_time)
-        #for car in cars_in_sim:
-        #    indiv_wait_time = traci.vehicle.getAccumulatedWaitingTime(car)
-            # update this car's wait time wait_times dict
-        #    self.wait_times[car] = indiv_wait_time
-        #    step_wait_time += indiv_wait_time
+        # 0 for wait time if step is 0
         if step == 0:
             self.prev_wait = 0
             self.cur_wait = 0
         else:
             step_wait = 0
             for lane in self.lanes:
+                # Get wait time in late
                 indiv_wait_time = traci.edge.getWaitingTime(lane)
-                # update this car's wait time wait_times dict
-                self.wait_times[lane] = indiv_wait_time
                 step_wait += indiv_wait_time
             self.prev_wait = self.cur_wait
             self.cur_wait = step_wait
-            
-    def getWaitTime(self, step):
-        step_wait_time = 0
-        # Cars in the current frame
-        #cars_in_sim = traci.vehicle.getIDList()
-
-        #self.step_time[step] = sum([traci.vehicle.getAccumulatedWaitingTime(car) for car in cars_in_sim]) - self.step_time[step - 1]
-        #print(self.step_time)
-        #for car in cars_in_sim:
-        #    indiv_wait_time = traci.vehicle.getAccumulatedWaitingTime(car)
-            # update this car's wait time wait_times dict
-        #    self.wait_times[car] = indiv_wait_time
-        #    step_wait_time += indiv_wait_time
-        if step == 0:
-            self.step_time_by_lane[0] = sum([traci.edge.getWaitingTime(lane) for lane in self.lanes])
-        else:
-            self.step_time_by_lane[step] = sum([traci.edge.getWaitingTime(lane) for lane in self.lanes]) - self.step_time_by_lane[step - 1]
-        for lane in self.lanes:
-            indiv_wait_time = traci.edge.getWaitingTime(lane)
-            self.wait_times_by_lane[lane].append(indiv_wait_time)
-            step_wait_time += indiv_wait_time
-        return step_wait_time
-
-        '''
-        # Traffic Lights in the Intersection (should be about 18)
-        traffic_lights = traci.trafficlight.getIDList()
-        #print("tls", traffic_lights)
-        #print(traci.trafficlight.getCompleteRedYellowGreenDefinition(self.junction))
-        '''
-        
-            #print("Lane ID", traci.vehicle.getLaneID(car))
-            #print("Upcoming Traffic Lights: ",
-            #traci.vehicle.getNextTLS(car))
-            # print(car, traci.vehicle.getSpeed(
-            #     car), traci.vehicle.getDistance(car))
 
     def findLongestQueueLane(self):
         num_vehs = {}
@@ -170,7 +84,6 @@ class Sim():
         # Get lane with most vehicles waiting
         return max(num_vehs, key = num_vehs.get)
         
-
     def getQValue(self, max_lane, action):
         if max_lane in self.qs:
             if action in self.qs[max_lane]:
@@ -244,22 +157,6 @@ class Sim():
         next_q = self.computeValueFromQValues(afterStepLongestLane, action)
         self.qs[lane][action] = cur_q + self.alpha * (reward + self.gamma * next_q - cur_q)
 
-    def set_tfl(self):
-        # Setting traffic light timtes
-        # REF: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
-        traffic_signal = ["rrrrrrGGGGgGGGrr", "yyyyyyyyrrrrrrrr", "rrrrrGGGGGGrrrrr",
-                          "rrrrryyyyyyrrrrr", "GrrrrrrrrrrGGGGg", "yrrrrrrrrrryyyyy"]
-        tfl = "J0"
-        #traci.trafficlight.setPhaseDuration(
-        #    tfl, random.randrange(1, 10))
-        #traci.trafficlight.setRedYellowGreenState(
-        #    tfl, random.choice(traffic_signal))
-        #print("here")
-        print(traci.trafficlight.getPhase(tfl))
-        traci.close()
-
-    
-
 
 if __name__ == "__main__":
 
@@ -269,5 +166,6 @@ if __name__ == "__main__":
         #"/Users/aneesha/sumo/tools/2022-11-10-00-32-34/osm.sumocfg"])
     sim = Sim()
     sim.run_simulation()
-    #sim.set_tfl()
+    print(sim.actions_taken)
+    print(sim.qs)
     traci.close()
