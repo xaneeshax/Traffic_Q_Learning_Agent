@@ -80,3 +80,11 @@ SUMO Python API: https://sumo.dlr.de/docs/TraCI/Interfacing_TraCI_from_Python.ht
 Traffic Light Documentation for API: https://sumo.dlr.de/docs/Tutorials/TraCI4Traffic_Lights.html
 
 Vehicle flow documentation (for the routes): https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#departlane
+
+## Running
+
+python run_q.py
+^ will run 10,000 steps (almost 3 hours of traffic) using q learning
+
+python run_random.py
+^ will run 10,000 steps (almost 3 hours of traffic) using random legal light choices
