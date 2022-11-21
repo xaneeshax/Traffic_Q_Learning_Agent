@@ -1,13 +1,8 @@
 # Traffic_Q_Learning_Agent
 
-## Create Your Own Github Branch
+## Presentation
+https://docs.google.com/presentation/d/1Hmio323lrSvD4h3xU-MN5fP9dEINcDasdfxs1rXZbXY/edit?usp=sharing 
 
-```
-git  checkout  -b  branchName
-git  add  .
-git  commit  -am  "commit message"
-git  push
-```
 
 ## Running SUMO on MacOS Moneterey (M1 chip)
 
@@ -65,6 +60,16 @@ sumo-gui -c osm.sumocfg
 
 `7a.rou.xml` 
   - has route info 
+  
+ 
+## Create Your Own Github Branch
+
+```
+git  checkout  -b  branchName
+git  add  .
+git  commit  -am  "commit message"
+git  push
+```
 
 ## Resources
 
