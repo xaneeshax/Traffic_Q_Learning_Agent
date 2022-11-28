@@ -128,9 +128,9 @@ class Sim():
     def findHighestWaitTimeLane(self):
         """
         Q-Criteria #2
-        Finds the lane with the most number of cars and returns this value. The intuition for the model 
-        is that the lane with the highest number of cars waiting is of the highest priority to ensure 
-        proper traffic flow
+        Finds the lane with where the cars in that lane have the highest accumulated wait time. The intuition 
+        for the model is that a lane may have lower incoming traffic but cars in said lane will wait 
+        significantly longer and we want to optimize for this 
         """
 
         num_vehs = {}
