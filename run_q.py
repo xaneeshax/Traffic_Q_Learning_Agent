@@ -2,6 +2,7 @@ import traci
 import traci.constants as tc
 import random
 import pandas as pd
+#import plotly.graph_objects as go
 
 # Path to the osm.sumocfg file
 ANEESHA_PATH = "/Users/aneesha/sumo/tools/2022-11-10-00-32-34/osm.sumocfg"
@@ -10,7 +11,7 @@ MAURA_PATH = "C:/Users/Maura/OneDrive - Northeastern University/Artificial Intel
 
 class Sim():
 
-    def __init__(self, epsilon=0.5, iters=10000):
+    def __init__(self, epsilon=0.5, iters=10000, alpha=0.01, gamma=0.9, visualizer=False):
         # Traffic Light Junction ID
         self.junction = 'J0'
         # Full logic definition of light settings at junction
@@ -40,6 +41,8 @@ class Sim():
         self.iters = iters
         # Wait Time Data & Lane - Vehicle Info
         self.data, self.vehs_data = [], []
+        # Visualizing traffic data
+        self.visualizer = visualizer
 
     def run_simulation(self):
         """
@@ -79,11 +82,33 @@ class Sim():
 
             self.step += 1
 
-        # Store Simulation Data (for visuals still working on this)
-        # df = pd.DataFrame(self.data)
-        # df.to_csv('wait-times.csv')
-        # df_2 = pd.DataFrame(self.vehs_data)
-        # df_2.to_csv('vehs-data.csv')
+        if self.visualizer:
+            self.visualize_traffic_data(self.data)
+
+    def visualize_traffic_data(self):
+        """
+        Visualizes the accumulated wait time for each lane / number of cars in each lane
+        """
+
+        wt = pd.DataFrame(self.data)
+        wt.columns = ['Timestep', 'Lane', 'Wait Time']
+        wt.head()
+
+        fig = go.Figure()
+        for lane in wt["Lane"].unique():
+
+            fig.add_trace(go.Scatter(
+                x=[i for i in range(1, 10000)],
+                y=list(wt[wt["Lane"] == lane]["Wait Time"]),
+                mode='lines',
+                name=f'{lane}')
+            )
+
+            fig.update_layout(title=f'Cars Waiting in a Lane {lane}',
+                              yaxis_title='Acc. Wait Times of Cars in Lane',
+                              xaxis_title='Time Step')
+
+            fig.show()
 
     def updateWaitTime(self):
         """
@@ -106,7 +131,7 @@ class Sim():
             self.prev_wait = self.cur_wait
             self.cur_wait = step_wait
 
-    def findLongestQueueLane_orig(self):
+    def findLongestQueueLane(self):
         """
         Q-Criteria #1
         Finds the lane with the most number of cars and returns this value. The intuition for the model 
@@ -285,6 +310,19 @@ class Sim():
         next_q = self.computeValueFromQValues(afterStepLongestLane, action)
         self.qs[lane][action] = cur_q + self.alpha * \
             (reward + self.gamma * next_q - cur_q)
+
+# HYPER PARAMETER TUNING
+# if __name__ == "__main__":
+#     # Random Policy for the Traffic Signals
+#     # Connect to script and intiate step counter
+#     for alpha in [0.01, 0.05, 0.1, 0.5, 1]:
+#         for gamma in [0.5, 0.65, 0.85, 1]:
+#             for epsilon in [0, 0.25, 0.5, 0.75, 1]:
+#                 traci.start(["sumo", "-c", ANEESHA_PATH])
+#                 print("AGE", alpha, gamma, epsilon)
+#                 sim_test = Sim(epsilon=epsilon, alpha=alpha, gamma=gamma)
+#                 sim_test.run_simulation()
+#                 traci.close()
 
 
 if __name__ == "__main__":
