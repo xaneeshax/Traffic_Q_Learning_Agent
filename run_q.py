@@ -34,27 +34,24 @@ class Sim():
         # Number of iterations
         self.iters = iters
 
-    # gets the policy for a given state
+    # gets the action to take (policy) for a given state
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
 
-    # returns a dictionary storing the policy/action for each state
+    # returns a dictionary storing the action to take (policy) for each state
     # I was thinking we could call this after we run the simulation to have a policy that reflects the
-    # computed Q values 
+    # computed Q values
     def totalPolicy(self):
         policy = {}
         for state in self.states:
             policy[state] = self.getPolicy(state)
         return policy
 
-
-    # todo - how to run simulation with policy from the computed q values
+    # run simulation with policy from the computed q values
     def run_sim_with_policy(self):
         while self.step < self.iters:
-
             # current light state
             cur_state = traci.trafficlight.getRedYellowGreenState(self.junction)
-
             # set traffic light to action based on the policy
             policy = self.totalPolicy()
             action_to_take = policy[cur_state]
@@ -225,6 +222,7 @@ if __name__ == "__main__":
     #print(sim_q.actions_taken)
     print(sim_q.qs)
     traci.close()
+    sim_q.run_sim_with_policy()
 #=======
 import traci
 import traci.constants as tc
