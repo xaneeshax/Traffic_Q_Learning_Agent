@@ -1,13 +1,11 @@
 # Traffic_Q_Learning_Agent
 
-## Create Your Own Github Branch
+## Presentation
+https://docs.google.com/presentation/d/1Hmio323lrSvD4h3xU-MN5fP9dEINcDasdfxs1rXZbXY/edit?usp=sharing 
 
-```
-git  checkout  -b  branchName
-git  add  .
-git  commit  -am  "commit message"
-git  push
-```
+## Final Report
+https://docs.google.com/document/d/1nNG7YIrSVACgBUsm745hBQVljJ6f99NiDa_7Wx2qTGg/edit?usp=sharing
+
 
 ## Running SUMO on MacOS Moneterey (M1 chip)
 
@@ -65,6 +63,16 @@ sumo-gui -c osm.sumocfg
 
 `7a.rou.xml` 
   - has route info 
+  
+ 
+## Create Your Own Github Branch
+
+```
+git  checkout  -b  branchName
+git  add  .
+git  commit  -am  "commit message"
+git  push
+```
 
 ## Resources
 
@@ -75,3 +83,11 @@ SUMO Python API: https://sumo.dlr.de/docs/TraCI/Interfacing_TraCI_from_Python.ht
 Traffic Light Documentation for API: https://sumo.dlr.de/docs/Tutorials/TraCI4Traffic_Lights.html
 
 Vehicle flow documentation (for the routes): https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#departlane
+
+## Running
+
+python run_q.py
+^ will run 10,000 steps (almost 3 hours of traffic) using q learning
+
+python run_random.py
+^ will run 10,000 steps (almost 3 hours of traffic) using random legal light choices

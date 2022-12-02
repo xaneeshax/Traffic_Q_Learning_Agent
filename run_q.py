@@ -73,7 +73,7 @@ class Sim():
             # Find new current longest lane
             afterStepLongestLane = self.findLongestQueueLane()
 
-            # Update Q-values
+            # Update Q-values            
             self.update_qs(lane, action, afterStepLongestLane, reward)
 
             # End simulation if there are no more cars in play
@@ -109,13 +109,10 @@ class Sim():
                               xaxis_title='Time Step')
 
             fig.show()
-
+        
     def updateWaitTime(self):
-        """
-        Updates the previous wait time and current wait time that are used to calculate the reward
-        """
-
-        # Set wait times to 0 for the first step
+        step_wait_time = 0
+        # 0 for wait time if step is 0
         if self.step == 0:
             self.prev_wait = 0
             self.cur_wait = 0
@@ -180,7 +177,7 @@ class Sim():
 
         Returns the Q-value for the specified lane and actions
         """
-
+        
         if max_lane in self.qs:
             if action in self.qs[max_lane]:
                 return self.qs[max_lane][action]
@@ -215,9 +212,9 @@ class Sim():
         Params:
             ryg_state (str) : A legal traffic light state 
 
-        Returns a list of valid traffic light states given the current one. 
+        Returns a list of valid traffic light states given the current one.
         """
-
+        
         # Yellow light must be at least 3 steps long to avoid emergency stops
         # Note: ryg_state is the same as self.actions_taken[-1]
         if 'y' in ryg_state:
@@ -227,6 +224,10 @@ class Sim():
                 if self.actions_taken[-2] != ryg_state or self.actions_taken[-3] != ryg_state:
                     return [ryg_state]
         # Self (don't change), or a red can become green, a yellow can become red, a green can become yellow
+        # Here I just manually found what legal following states are
+        # Pulled ones that follow rules from all light states given by SUMO
+        # Self (don't change), or a red can become green, a yellow can become
+        # red, a green can become yellow
         if ryg_state == 'GGGgrGrrrrrrGrrrr':
             return [ryg_state, 'yyyyryrrrrrryrrrr']
         if ryg_state == 'yyyyryrrrrrryrrrr':
@@ -254,9 +255,9 @@ class Sim():
         Returns the action that yields the highest Q-value for the lane with the most number of vehicles
         waiting
         """
-
-        # Get the legal traffic light states and the lane with the most number of cars waiting
+        
         actions = self.getLegalActions(ryg_state)
+        # Action to return, initialize to first action
         action = actions[0]
         lane = self.findLongestQueueLane()
         # Q value for best action
