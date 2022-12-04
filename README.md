@@ -40,7 +40,7 @@ cmake --build . --parallel $(sysctl -n hw.ncpu)
   - Links to XML files that map the routes, junctions, and cars
 
 `osm.net.xml`
-  -has traffic light data (plus other things) 
+  - has traffic light data (plus other things) 
   - comment at top has line number for traffic light for our intersection
 
 `7a.rou.xml` 
