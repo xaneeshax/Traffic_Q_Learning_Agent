@@ -32,24 +32,6 @@ cd $SUMO_HOME/build/cmake-build
 cmake --build . --parallel $(sysctl -n hw.ncpu)
 ```
 
-## Generating XML Data
-
-Step 1: Run the omsWebWizard to kickstart the SUMO software
-```
-cd sumo/tools/
-python osmWebWizard.py
-```
-Step 2:
-Choose a Portion of the Map and configure traffic flow settings using the selecter tools
-
-Step 3:
-Generate the data. This will run a process to create folders containing the `osm.sumoconfig` file and other related XML files
-
-## Running the Simulation
-
-```
-sumo-gui -c osm.sumocfg 
-```
 
 ## File Descriptions
 
@@ -63,17 +45,23 @@ sumo-gui -c osm.sumocfg
 
 `7a.rou.xml` 
   - has route info 
-  
+
+
+## Running the Agnet
  
-## Create Your Own Github Branch
-
+Will run 10,000 steps (almost 3 hours of traffic) using Q-Learning and the Random Traffic Light Agents
 ```
-git  checkout  -b  branchName
-git  add  .
-git  commit  -am  "commit message"
-git  push
+python run_new_q.py
 ```
 
+## Running the Simulation
+
+```
+cd tools
+sumo-gui -c osm.sumocfg 
+```
+
+ 
 ## Resources
 
 Link to download and has video tutorial: https://www.eclipse.org/sumo/
@@ -83,11 +71,3 @@ SUMO Python API: https://sumo.dlr.de/docs/TraCI/Interfacing_TraCI_from_Python.ht
 Traffic Light Documentation for API: https://sumo.dlr.de/docs/Tutorials/TraCI4Traffic_Lights.html
 
 Vehicle flow documentation (for the routes): https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#departlane
-
-## Running
-
-python run_q.py
-^ will run 10,000 steps (almost 3 hours of traffic) using q learning
-
-python run_random.py
-^ will run 10,000 steps (almost 3 hours of traffic) using random legal light choices
