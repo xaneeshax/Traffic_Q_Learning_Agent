@@ -39,7 +39,7 @@ cmake --build . --parallel $(sysctl -n hw.ncpu)
 ## File Descriptions
 
 `osm.sumocfg`
-  - Used to buikd the simulation
+  - Used to build the simulation
   - Links to XML files that map the routes, junctions, and cars
 
 `osm.net.xml`
